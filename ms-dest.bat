@@ -78,7 +78,10 @@ echo(
 
 :installSSH_downloadInstalller
 echo -- Downloading SSH installer...
-powershell Invoke-WebRequest -outFile C:/Users/%USERNAME%/openSSHInstaller.msi https://github.com/PowerShell/Win32-OpenSSH/releases/download/v9.2.2.0p1-Beta/OpenSSH-Win64-v9.2.2.0.msi
+@REM This enables TLSv1.1 and TLSv1.2, which can by default be disabled.
+@REM This is required in order to communicate with modern secure websites.
+@REM Then, it fetches a file from an OpenSSH for windows github release.
+powershell "[Net.ServicePointManager]::SecurityProtocol = 'Tls, Tls11, Tls12, Ssl3'; Invoke-WebRequest -outFile C:/Users/%USERNAME%/openSSHInstaller.msi https://github.com/PowerShell/Win32-OpenSSH/releases/download/v9.2.2.0p1-Beta/OpenSSH-Win64-v9.2.2.0.msi"
 @REM Check if error occurred during download
 if %errorLevel% == 0 goto installSSH_downloadSuccessful
 
